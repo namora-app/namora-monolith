@@ -31,7 +31,7 @@ public class AuthIdentity {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private String role;
+    private Role role;
 
     @Column(name = "refresh_token")
     private String refreshToken;

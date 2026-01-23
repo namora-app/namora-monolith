@@ -3,6 +3,7 @@ package com.namora.identity.services;
 import com.namora.identity.dto.ApiResponse;
 import com.namora.identity.dto.SignUpRequest;
 import com.namora.identity.entities.AuthIdentity;
+import com.namora.identity.entities.Role;
 import com.namora.identity.helpers.AuthHelper;
 import com.namora.identity.repository.AuthIdentityRepository;
 import com.namora.identity.security.CustomUserDetails;
@@ -37,7 +38,7 @@ public class AuthIdentityService {
         AuthIdentity authIdentity = new AuthIdentity();
         authIdentity.setEmail(signUpRequest.email());
         authIdentity.setPassword(passwordEncoder.encode(signUpRequest.password()));
-        authIdentity.setRole(signUpRequest.role());
+        authIdentity.setRole(Role.valueOf(signUpRequest.role()));
         authIdentityRepository.save(authIdentity);
         AuthIdentity newAuthIdentity = authIdentityRepository.findByEmail(signUpRequest.email()).get();
         createAndSaveTokens(newAuthIdentity, response);
