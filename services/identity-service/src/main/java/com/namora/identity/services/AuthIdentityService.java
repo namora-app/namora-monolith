@@ -1,6 +1,7 @@
 package com.namora.identity.services;
 
 import com.namora.identity.dto.ApiResponse;
+import com.namora.identity.dto.LoginRequest;
 import com.namora.identity.dto.SignUpRequest;
 import com.namora.identity.entities.AuthIdentity;
 import com.namora.identity.entities.Role;
@@ -32,9 +33,8 @@ public class AuthIdentityService {
 
     public ResponseEntity<?> createUser(SignUpRequest signUpRequest, HttpServletResponse response) {
         Optional<AuthIdentity> existingUser = authIdentityRepository.findByEmail(signUpRequest.email());
-        if (existingUser.isPresent()) {
+        if (existingUser.isPresent())
             return new ResponseEntity<>(ApiResponse.error("User already exists"), HttpStatus.CONFLICT);
-        }
         AuthIdentity authIdentity = new AuthIdentity();
         authIdentity.setEmail(signUpRequest.email());
         authIdentity.setPassword(passwordEncoder.encode(signUpRequest.password()));
@@ -43,6 +43,15 @@ public class AuthIdentityService {
         AuthIdentity newAuthIdentity = authIdentityRepository.findByEmail(signUpRequest.email()).get();
         createAndSaveTokens(newAuthIdentity, response);
         return new ResponseEntity<>(ApiResponse.success("User created successfully!"), HttpStatus.CREATED);
+    }
+
+    public ResponseEntity<?> loginUser(LoginRequest loginRequest, HttpServletResponse response) {
+        Optional<AuthIdentity> user = authIdentityRepository.findByEmail(loginRequest.email());
+        if (user.isEmpty()) return new ResponseEntity<>(ApiResponse.error("User not found!"), HttpStatus.NOT_FOUND);
+        if (!passwordEncoder.matches(loginRequest.password(), user.get().getPassword()))
+            return new ResponseEntity<>(ApiResponse.error("Password is incorrect!"), HttpStatus.UNAUTHORIZED);
+        createAndSaveTokens(user.get(), response);
+        return new ResponseEntity<>(ApiResponse.success("User logged in successfully!"), HttpStatus.OK);
     }
 
     private void createAndSaveTokens(AuthIdentity authIdentity, HttpServletResponse response) {

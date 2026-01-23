@@ -1,6 +1,7 @@
 package com.namora.identity.controllers;
 
 import com.namora.identity.dto.ApiResponse;
+import com.namora.identity.dto.LoginRequest;
 import com.namora.identity.dto.SignUpRequest;
 import com.namora.identity.services.AuthIdentityService;
 import jakarta.servlet.http.HttpServletResponse;
@@ -23,6 +24,15 @@ public class AuthController {
     public ResponseEntity<?> createUser(@Valid @RequestBody SignUpRequest signUpRequest, HttpServletResponse response) {
         try {
             return authIdentityService.createUser(signUpRequest, response);
+        } catch (Exception e) {
+            return new ResponseEntity<>(ApiResponse.error("Internal Server Error Occurred!"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@Valid @RequestBody LoginRequest loginRequest, HttpServletResponse response) {
+        try {
+            return authIdentityService.loginUser(loginRequest, response);
         } catch (Exception e) {
             return new ResponseEntity<>(ApiResponse.error("Internal Server Error Occurred!"), HttpStatus.INTERNAL_SERVER_ERROR);
         }
