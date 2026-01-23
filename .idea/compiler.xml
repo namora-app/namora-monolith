@@ -8,9 +8,9 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="payment-service" />
+        <module name="restaurant-service" />
         <module name="gateway-service" />
         <module name="dispatch-service" />
-        <module name="identity-service (1)" />
         <module name="user-service" />
         <module name="order-service" />
         <module name="identity-service" />
