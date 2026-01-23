@@ -33,6 +33,9 @@ public class AuthIdentity {
     @Enumerated(EnumType.STRING)
     private String role;
 
+    @Column(name = "refresh_token")
+    private String refreshToken;
+
     @CreationTimestamp
     @Column(updatable = false)
     private LocalDateTime createdAt;
