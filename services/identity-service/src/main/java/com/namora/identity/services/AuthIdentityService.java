@@ -38,6 +38,9 @@ public class AuthIdentityService {
         Optional<AuthIdentity> existingUser = authIdentityRepository.findByEmail(signUpRequest.email());
         if (existingUser.isPresent())
             return new ResponseEntity<>(ApiResponse.error("User already exists"), HttpStatus.CONFLICT);
+        if (!Role.isValidRole(signUpRequest.role())) {
+            return new ResponseEntity<>(ApiResponse.error("Invalid role"), HttpStatus.BAD_REQUEST);
+        }
         AuthIdentity authIdentity = new AuthIdentity();
         authIdentity.setEmail(signUpRequest.email());
         authIdentity.setPassword(passwordEncoder.encode(signUpRequest.password()));
