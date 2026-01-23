@@ -9,6 +9,8 @@ import com.namora.identity.helpers.AuthHelper;
 import com.namora.identity.repository.AuthIdentityRepository;
 import com.namora.identity.security.CustomUserDetails;
 import com.namora.identity.utils.JwtUtil;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.Optional;
 
 @Service
@@ -52,6 +55,53 @@ public class AuthIdentityService {
             return new ResponseEntity<>(ApiResponse.error("Password is incorrect!"), HttpStatus.UNAUTHORIZED);
         createAndSaveTokens(user.get(), response);
         return new ResponseEntity<>(ApiResponse.success("User logged in successfully!"), HttpStatus.OK);
+    }
+
+    public ResponseEntity<?> refreshUser(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            String refreshToken = AuthHelper.getRefreshTokenFromRequest(request);
+            if (refreshToken == null)
+                return new ResponseEntity<>(ApiResponse.error("Refresh token is required!"), HttpStatus.UNAUTHORIZED);
+            String email = jwtUtil.getEmail(refreshToken);
+            if (email == null)
+                return new ResponseEntity<>(ApiResponse.error("Invalid refresh token!"), HttpStatus.UNAUTHORIZED);
+            Optional<AuthIdentity> authIdentity = authIdentityRepository.findByEmail(email);
+            if (authIdentity.isEmpty())
+                return new ResponseEntity<>(ApiResponse.error("User not found!"), HttpStatus.NOT_FOUND);
+            if (!jwtUtil.isValidRefreshToken(refreshToken, new CustomUserDetails(authIdentity.get())))
+                return new ResponseEntity<>(ApiResponse.error("Invalid refresh token!"), HttpStatus.UNAUTHORIZED);
+            createAndSaveTokens(authIdentity.get(), response);
+            return new ResponseEntity<>(ApiResponse.success("User refreshed successfully!"), HttpStatus.OK);
+        } catch (IOException e) {
+            return new ResponseEntity<>(ApiResponse.error(e.getMessage()), HttpStatus.UNAUTHORIZED);
+        } catch (ServletException e) {
+            return new ResponseEntity<>(ApiResponse.error("Internal Server Error Occurred!"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public ResponseEntity<?> logoutUser(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            String refreshToken = AuthHelper.getRefreshTokenFromRequest(request);
+            String accessToken = AuthHelper.getAccessTokenFromRequest(request);
+            if (refreshToken != null) checkToken(refreshToken);
+            else if (accessToken != null) checkToken(accessToken);
+            response.addCookie(AuthHelper.createAccessTokenCookie("", 0));
+            response.addCookie(AuthHelper.createRefreshTokenCookie("", 0));
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+        return new ResponseEntity<>(ApiResponse.success("User logged out successfully!"), HttpStatus.OK);
+    }
+
+    private void checkToken(String refreshToken) {
+        String email = jwtUtil.getEmail(refreshToken);
+        if (email != null) {
+            Optional<AuthIdentity> authIdentity = authIdentityRepository.findByEmail(email);
+            if (authIdentity.isPresent()) {
+                authIdentity.get().setRefreshToken("");
+                authIdentityRepository.save(authIdentity.get());
+            }
+        }
     }
 
     private void createAndSaveTokens(AuthIdentity authIdentity, HttpServletResponse response) {

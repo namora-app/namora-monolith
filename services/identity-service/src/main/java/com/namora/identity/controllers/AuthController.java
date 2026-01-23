@@ -4,6 +4,7 @@ import com.namora.identity.dto.ApiResponse;
 import com.namora.identity.dto.LoginRequest;
 import com.namora.identity.dto.SignUpRequest;
 import com.namora.identity.services.AuthIdentityService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +34,24 @@ public class AuthController {
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequest loginRequest, HttpServletResponse response) {
         try {
             return authIdentityService.loginUser(loginRequest, response);
+        } catch (Exception e) {
+            return new ResponseEntity<>(ApiResponse.error("Internal Server Error Occurred!"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<?> refresh(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            return authIdentityService.refreshUser(request, response);
+        } catch (Exception e) {
+            return new ResponseEntity<>(ApiResponse.error("Internal Server Error Occurred!"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            return authIdentityService.logoutUser(request, response);
         } catch (Exception e) {
             return new ResponseEntity<>(ApiResponse.error("Internal Server Error Occurred!"), HttpStatus.INTERNAL_SERVER_ERROR);
         }
