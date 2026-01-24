@@ -3,6 +3,7 @@ package com.namora.restaurant.services;
 import com.namora.restaurant.dto.ApiResponse;
 import com.namora.restaurant.dto.RestaurantCreateRequest;
 import com.namora.restaurant.entities.Restaurant;
+import com.namora.restaurant.helper.AuthHelper;
 import com.namora.restaurant.repositories.RestaurantRepository;
 import com.namora.restaurant.storage.UserContext;
 import lombok.RequiredArgsConstructor;
@@ -38,16 +39,9 @@ public class RestaurantService {
     }
 
     public ResponseEntity<?> updateRestaurant(String restaurantId, RestaurantCreateRequest restaurantCreateRequest) {
-        String userRole = UserContext.getCurrentUserRole();
-        String userId = UserContext.getCurrentUserId();
-        if (!userRole.equals("RESTAURANT_OWNER")) {
-            return new ResponseEntity<>("Invalid user role", HttpStatus.FORBIDDEN);
-        }
         Optional<Restaurant> optionalRestaurant = restaurantRepository.findById(restaurantId);
-        if (optionalRestaurant.isEmpty())
-            return new ResponseEntity<>(ApiResponse.error("Restaurant not found!"), HttpStatus.NOT_FOUND);
-        if (!Objects.equals(optionalRestaurant.get().getOwnerId(), userId))
-            return new ResponseEntity<>(ApiResponse.error("Unauthorized Access"), HttpStatus.FORBIDDEN);
+        AuthHelper.Result result = AuthHelper.checkRestaurantAuth(UserContext.getCurrentUserRole(), UserContext.getCurrentUserId(), optionalRestaurant);
+        if(!result.passed) return result.responseEntity;
         Restaurant restaurant = optionalRestaurant.get();
         restaurant.setName(restaurantCreateRequest.name());
         restaurant.setAddress(restaurantCreateRequest.address());
@@ -69,17 +63,9 @@ public class RestaurantService {
     }
 
     public ResponseEntity<?> toggleOpenStatus(String restaurantId) {
-        String userRole = UserContext.getCurrentUserRole();
-        String userId = UserContext.getCurrentUserId();
-        if (!userRole.equals("RESTAURANT_OWNER")) {
-            return new ResponseEntity<>("Invalid user role", HttpStatus.FORBIDDEN);
-        }
         Optional<Restaurant> restaurant = restaurantRepository.findById(restaurantId);
-        if (restaurant.isEmpty()) {
-            return new ResponseEntity<>(ApiResponse.error("Restaurant not found!"), HttpStatus.NOT_FOUND);
-        }
-        if (!restaurant.get().getOwnerId().equals(userId))
-            return new ResponseEntity<>(ApiResponse.error("Unauthorized Access"), HttpStatus.FORBIDDEN);
+        AuthHelper.Result result = AuthHelper.checkRestaurantAuth(UserContext.getCurrentUserRole(), UserContext.getCurrentUserId(), restaurant);
+        if(!result.passed) return result.responseEntity;
         restaurant.get().setOpen(!restaurant.get().isOpen());
         restaurantRepository.save(restaurant.get());
         return new ResponseEntity<>(ApiResponse.success("Restaurant toggled successfully!", restaurant.get()), HttpStatus.OK);

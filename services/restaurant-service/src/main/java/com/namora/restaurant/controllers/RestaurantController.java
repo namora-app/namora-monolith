@@ -1,14 +1,13 @@
 package com.namora.restaurant.controllers;
 
+import com.namora.restaurant.dto.ApiResponse;
 import com.namora.restaurant.dto.RestaurantCreateRequest;
 import com.namora.restaurant.services.RestaurantService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/restaurants")
@@ -18,10 +17,37 @@ public class RestaurantController {
 
     @PostMapping
     public ResponseEntity<?> createRestaurant(@RequestBody RestaurantCreateRequest restaurantCreateRequest) {
-        try{
+        try {
             return restaurantService.createRestaurant(restaurantCreateRequest);
-        }catch(Exception e){
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (Exception e) {
+            return new ResponseEntity<>(ApiResponse.error(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateRestaurant(@Valid @RequestBody RestaurantCreateRequest restaurantCreateRequest, @PathVariable String id) {
+        try {
+            return restaurantService.updateRestaurant(id, restaurantCreateRequest);
+        } catch (Exception e) {
+            return new ResponseEntity<>(ApiResponse.error(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/owner")
+    public ResponseEntity<?> getAllRestaurantOwner() {
+        try {
+            return restaurantService.getAllRestaurants();
+        } catch (Exception e) {
+            return new ResponseEntity<>(ApiResponse.error(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PutMapping("/{id}/status")
+    public ResponseEntity<?> toggleIsOpen(@PathVariable String id) {
+        try {
+            return restaurantService.toggleOpenStatus(id);
+        } catch (Exception e) {
+            return new ResponseEntity<>(ApiResponse.error(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
