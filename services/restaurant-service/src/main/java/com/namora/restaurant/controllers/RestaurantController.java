@@ -25,7 +25,9 @@ public class RestaurantController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateRestaurant(@Valid @RequestBody RestaurantCreateRequest restaurantCreateRequest, @PathVariable String id) {
+    public ResponseEntity<?> updateRestaurant(
+            @Valid @RequestBody RestaurantCreateRequest restaurantCreateRequest,
+            @PathVariable("id") String id) {
         try {
             return restaurantService.updateRestaurant(id, restaurantCreateRequest);
         } catch (Exception e) {
@@ -43,7 +45,7 @@ public class RestaurantController {
     }
 
     @PutMapping("/{id}/status")
-    public ResponseEntity<?> toggleIsOpen(@PathVariable String id) {
+    public ResponseEntity<?> toggleIsOpen(@PathVariable("id") String id) {
         try {
             return restaurantService.toggleOpenStatus(id);
         } catch (Exception e) {

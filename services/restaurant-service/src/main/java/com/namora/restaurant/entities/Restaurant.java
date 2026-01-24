@@ -1,5 +1,6 @@
 package com.namora.restaurant.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.locationtech.jts.geom.Point;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -41,8 +43,9 @@ public class Restaurant {
     private Double latitude;
     private Double longitude;
 
+    @JsonIgnore
     @Column(columnDefinition = "geography(Point, 4326)")
-    private String location;
+    private Point location;
 
     @Column(name = "fssai_license")
     private String fssaiLicense;

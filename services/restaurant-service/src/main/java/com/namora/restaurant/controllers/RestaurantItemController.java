@@ -17,7 +17,7 @@ public class RestaurantItemController {
     private final ItemService itemService;
 
     @PostMapping
-    public ResponseEntity<?> addItem(@PathVariable String restaurantId, @Valid @RequestBody ItemRequest itemRequest) {
+    public ResponseEntity<?> addItem(@PathVariable("restaurantId") String restaurantId, @Valid @RequestBody ItemRequest itemRequest) {
         try {
             return itemService.addItem(restaurantId, itemRequest);
         } catch (Exception error) {
@@ -26,7 +26,7 @@ public class RestaurantItemController {
     }
 
     @PutMapping("/{itemId}")
-    public ResponseEntity<?> updateItem(@Valid @RequestBody ItemRequest itemRequest, @PathVariable String itemId, @PathVariable String restaurantId) {
+    public ResponseEntity<?> updateItem(@Valid @RequestBody ItemRequest itemRequest, @PathVariable("itemId") String itemId, @PathVariable("restaurantId") String restaurantId) {
         try {
             return itemService.updateItem(restaurantId, itemId, itemRequest);
         } catch (Exception error) {
@@ -35,7 +35,7 @@ public class RestaurantItemController {
     }
 
     @DeleteMapping("/{itemId}")
-    public ResponseEntity<?> deleteItem(@PathVariable String restaurantId, @PathVariable String itemId) {
+    public ResponseEntity<?> deleteItem(@PathVariable String restaurantId, @PathVariable("itemId") String itemId) {
         try {
             return itemService.deleteItem(restaurantId, itemId);
         } catch (Exception error) {

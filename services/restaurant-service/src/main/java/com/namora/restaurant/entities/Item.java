@@ -1,5 +1,7 @@
 package com.namora.restaurant.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,6 +25,7 @@ public class Item {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id", nullable = false)
+    @JsonIgnore  // Ignore the entire restaurant object
     private Restaurant restaurant;
 
     @Column(nullable = false)
@@ -48,6 +51,11 @@ public class Item {
     @Column(name = "discount_percent")
     @Builder.Default
     private BigDecimal discountPercent = BigDecimal.ZERO;
+
+    @JsonProperty("restaurantId")
+    public String getRestaurantId() {
+        return restaurant != null ? restaurant.getId() : null;
+    }
 
     public BigDecimal getFinalPrice() {
         if (discountPercent == null || discountPercent.compareTo(BigDecimal.ZERO) == 0) {

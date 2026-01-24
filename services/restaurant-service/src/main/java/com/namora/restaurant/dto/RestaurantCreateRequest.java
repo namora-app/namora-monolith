@@ -1,21 +1,22 @@
 package com.namora.restaurant.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public record RestaurantCreateRequest(
-        @NotBlank
+        @NotBlank(message = "Name is required")
         String name,
 
-        @NotBlank
+        @NotBlank(message = "Address is required")
         String address,
 
-        @NotBlank
+        @NotNull(message = "Latitude is required")
         Double latitude,
 
-        @NotBlank
+        @NotNull(message = "Longitude is required")
         Double longitude,
 
-        @NotBlank
+        @NotBlank(message = "FSSAI license is required")
         String fssaiLicense
 ) {
 }

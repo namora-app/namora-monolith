@@ -3,10 +3,12 @@ package com.namora.gateway.filter;
 import com.namora.gateway.utils.JwtUtil;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
+import org.springframework.http.HttpCookie;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
@@ -30,25 +32,38 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
         return ((exchange, chain) -> {
             String pathUrl = exchange.getRequest().getURI().getPath();
             if (!pathUrl.startsWith("/auth")) {
-                if (!exchange.getRequest().getHeaders().containsKey(HttpHeaders.AUTHORIZATION)) {
-                    return onError(exchange, "Missing Authorization Header", HttpStatus.UNAUTHORIZED);
-                }
-                String authHeader = exchange.getRequest().getHeaders().get(HttpHeaders.AUTHORIZATION).get(0);
+                String token = null;
 
-                if (authHeader != null && authHeader.startsWith("Bearer ")) {
-                    authHeader = authHeader.substring(7);
+                MultiValueMap<String, HttpCookie> cookies = exchange.getRequest().getCookies();
+                if (cookies.containsKey("accessToken")) {
+                    HttpCookie cookie = cookies.getFirst("accessToken");
+                    if (cookie != null) {
+                        token = cookie.getValue();
+                    }
                 }
+
+                if (token == null && exchange.getRequest().getHeaders().containsKey(HttpHeaders.AUTHORIZATION)) {
+                    String authHeader = exchange.getRequest().getHeaders().get(HttpHeaders.AUTHORIZATION).get(0);
+                    if (authHeader != null && authHeader.startsWith("Bearer ")) {
+                        token = authHeader.substring(7);
+                    }
+                }
+
+                if (token == null) {
+                    return onError(exchange, "Missing Authorization Token", HttpStatus.UNAUTHORIZED);
+                }
+
                 try {
-                    if (!jwtUtil.isValidAccessToken(authHeader)) {
+                    if (!jwtUtil.isValidAccessToken(token)) {
                         return onError(exchange, "Invalid Token!", HttpStatus.UNAUTHORIZED);
                     }
-
-                    String userId = jwtUtil.getUserId(authHeader);
-                    String userRole = jwtUtil.getRole(authHeader);
+                    String userId = jwtUtil.getUserId(token);
+                    String userRole = jwtUtil.getRole(token);
+                    System.out.println("User ID: " + userId + " Role: " + userRole);
 
                     ServerHttpRequest mutatedRequest = exchange.getRequest()
                             .mutate()
-                            .header("X-User-Id", userId)
+                            .header("X-User-ID", userId)
                             .header("X-Role", userRole)
                             .build();
                     return chain.filter(exchange.mutate().request(mutatedRequest).build());

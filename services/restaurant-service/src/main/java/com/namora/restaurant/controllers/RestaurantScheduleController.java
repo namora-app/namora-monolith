@@ -9,14 +9,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/restaurants/{id}/schedule")
+@RequestMapping("/restaurants/{restaurantId}/schedule")
 @RequiredArgsConstructor
 public class RestaurantScheduleController {
 
     private final RestaurantScheduleService restaurantScheduleService;
 
     @PostMapping
-    public ResponseEntity<?> createOrUpdateRestaurantSchedule(@PathVariable String id, @RequestBody RestaurantScheduleRequest restaurantScheduleRequest) {
+    public ResponseEntity<?> createOrUpdateRestaurantSchedule(@PathVariable("restaurantId") String id, @RequestBody RestaurantScheduleRequest restaurantScheduleRequest) {
         try {
             RestaurantScheduleRequest cleaned = new RestaurantScheduleRequest(restaurantScheduleRequest.weekDay(), restaurantScheduleRequest.startTime(), restaurantScheduleRequest.endTime());
             return restaurantScheduleService.createOrUpdateRestaurantSchedule(cleaned, id);
@@ -26,7 +26,7 @@ public class RestaurantScheduleController {
     }
 
     @GetMapping
-    public ResponseEntity<?> getRestaurantSchedule(@PathVariable String id) {
+    public ResponseEntity<?> getRestaurantSchedule(@PathVariable("restaurantId") String id) {
         try {
             return restaurantScheduleService.findRestaurantSchedules(id);
         } catch (Exception e) {

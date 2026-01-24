@@ -111,7 +111,7 @@ public class AuthIdentityService {
         CustomUserDetails userDetails = new CustomUserDetails(authIdentity);
         String accessToken = jwtUtil.generateAccessToken(userDetails);
         String refreshToken = jwtUtil.generateRefreshToken(userDetails);
-        response.addCookie(AuthHelper.createAccessTokenCookie(accessToken, 15 * 60 * 60));
+        response.addCookie(AuthHelper.createAccessTokenCookie(accessToken, 15 * 60));
         response.addCookie(AuthHelper.createRefreshTokenCookie(refreshToken, 7 * 24 * 60 * 60));
         authIdentity.setRefreshToken(refreshToken);
         authIdentityRepository.save(authIdentity);
