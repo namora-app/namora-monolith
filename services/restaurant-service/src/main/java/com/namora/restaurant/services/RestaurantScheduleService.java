@@ -2,6 +2,7 @@ package com.namora.restaurant.services;
 
 import com.namora.restaurant.dto.ApiResponse;
 import com.namora.restaurant.dto.RestaurantScheduleRequest;
+import com.namora.restaurant.dto.RestaurantScheduleResult;
 import com.namora.restaurant.entities.Restaurant;
 import com.namora.restaurant.entities.RestaurantSchedule;
 import com.namora.restaurant.helper.AuthHelper;
@@ -52,7 +53,8 @@ public class RestaurantScheduleService {
             restaurantScheduleRepository.save(newRestaurantSchedule);
         }
         List<RestaurantSchedule> restaurantSchedules = restaurantScheduleRepository.findByRestaurantId(restaurantId);
-        return new ResponseEntity<>(ApiResponse.success("Updated restaurant schedules!", restaurantSchedules), HttpStatus.OK);
+        RestaurantScheduleResult restaurantScheduleResult = new RestaurantScheduleResult(restaurantId , restaurantSchedules);
+        return new ResponseEntity<>(ApiResponse.success("Updated restaurant schedules!", restaurantScheduleResult), HttpStatus.OK);
     }
 
 
@@ -62,6 +64,7 @@ public class RestaurantScheduleService {
         AuthHelper.Result result = AuthHelper.checkRestaurantAuth(userRole, userId, restaurantRepository.findById(restaurantId));
         if(!result.passed) return result.responseEntity;
         List<RestaurantSchedule> restaurantScheduleList = restaurantScheduleRepository.findByRestaurantId(restaurantId);
-        return new ResponseEntity<>(ApiResponse.success("Updated restaurant schedules!", restaurantScheduleList), HttpStatus.OK);
+        RestaurantScheduleResult restaurantScheduleResult = new RestaurantScheduleResult(restaurantId , restaurantScheduleList);
+        return new ResponseEntity<>(ApiResponse.success("Updated restaurant schedules!", restaurantScheduleResult), HttpStatus.OK);
     }
 }

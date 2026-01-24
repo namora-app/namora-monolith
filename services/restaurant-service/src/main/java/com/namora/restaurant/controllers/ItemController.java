@@ -14,7 +14,11 @@ public class ItemController {
     private final ItemService itemService;
 
     @GetMapping
-    public ResponseEntity<?> getTopItems(@RequestParam double latitude, @RequestParam double longitude, @RequestParam String name) {
+    public ResponseEntity<?> getTopItems(
+            @RequestParam("latitude") double latitude,
+            @RequestParam("longitude") double longitude,
+            @RequestParam("name") String name
+    ) {
         try {
             return itemService.getTopItems(name, latitude, longitude);
         } catch (Exception ex) {
@@ -23,13 +27,12 @@ public class ItemController {
     }
 
     @GetMapping("/restaurants/{restaurantId}")
-    public ResponseEntity<?> getItemsByRestaurant(@PathVariable String restaurantId) {
+    public ResponseEntity<?> getItemsByRestaurant(@PathVariable("restaurantId") String restaurantId) {
         try {
             return itemService.getAllItemsByRestaurant(restaurantId);
         } catch (Exception ex) {
             return new ResponseEntity<>(ApiResponse.error(ex.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
     }
 
 }

@@ -2,6 +2,7 @@ package com.namora.restaurant.services;
 
 import com.namora.restaurant.dto.ApiResponse;
 import com.namora.restaurant.dto.ItemRequest;
+import com.namora.restaurant.dto.ItemSearchResult;
 import com.namora.restaurant.entities.Item;
 import com.namora.restaurant.entities.Restaurant;
 import com.namora.restaurant.helper.AuthHelper;
@@ -13,8 +14,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -73,7 +76,24 @@ public class ItemService {
         // all items having similar item name passed in query , I want 10 items (if exact name matching not found , find on the basis of similarity score)
         // topPriority less distance
         // if distance matches then higher rating comes first
-        return new ResponseEntity<>(ApiResponse.success("Items fetched successfully!", itemRepository.getTopItems(name, latitude, longitude)), HttpStatus.OK);
+        List<Object[]> results = itemRepository.getTopItemsWithDistance(name, latitude, longitude);
+
+        List<ItemSearchResult> items = results.stream()
+                .map(row -> new ItemSearchResult(
+                        (String) row[0],           // id
+                        (String) row[1],           // restaurantId
+                        (String) row[2],           // name
+                        (String) row[3],           // description
+                        (Boolean) row[4],          // isVeg
+                        (BigDecimal) row[5],       // price
+                        (Boolean) row[6],          // isAvailable
+                        ((Number) row[7]).floatValue(), // rating
+                        (BigDecimal) row[8],       // discountPercent
+                        ((Number) row[9]).doubleValue()  // distance
+                ))
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(ApiResponse.success("Items found!", items));
     }
 
 }
