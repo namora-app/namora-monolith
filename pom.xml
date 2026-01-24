@@ -3,11 +3,12 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.integrate</groupId>
-    <artifactId>platform-parent</artifactId>
+    <groupId>com.namora</groupId>
+    <artifactId>namora-monolith</artifactId>
     <version>1.0.0</version>
     <packaging>pom</packaging>
     <modules>
+        <module>services/eureka-server</module>
         <module>services/user-service</module>
         <module>services/identity-service</module>
         <module>services/gateway-service</module>

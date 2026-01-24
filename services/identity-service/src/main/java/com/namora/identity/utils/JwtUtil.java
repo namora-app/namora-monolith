@@ -43,6 +43,8 @@ public class JwtUtil {
         Map<String, Object> claims = new HashMap<>();
         claims.put("type", "access");
         claims.put("email", userDetails.getAuthIdentity().getEmail());
+        claims.put("userId", userDetails.getAuthIdentity().getId());
+        claims.put("role", userDetails.getAuthIdentity().getRole());
         return Jwts.builder()
                 .subject(userDetails.getAuthIdentity().getId())
                 .claims(claims)
@@ -96,14 +98,6 @@ public class JwtUtil {
 
     public String getEmail(String token) {
         return extractClaim(token, claims -> claims.get("email", String.class));
-    }
-
-    public String getIdAccessToken(String accessToken) {
-        return extractClaim(accessToken, Claims::getSubject);
-    }
-
-    public String getIdRefreshToken(String refreshToken) {
-        return extractClaim(refreshToken, Claims::getSubject);
     }
 
     private boolean isAccessTokenExpired(String token) {

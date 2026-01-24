@@ -1,0 +1,49 @@
+server:
+  port: 8090 # The Gateway usually runs on 8080
+
+auth:
+  ACCESS_TOKEN_SECRET: ${ACCESS_TOKEN_SECRET}
+
+spring:
+  application:
+    name: gateway-service
+  cloud:
+    gateway:
+      routes:
+        # 1. Identity Service (Public - No Auth Filter needed for login/signup)
+        - id: identity-service
+          uri: lb://IDENTITY-SERVICE
+          predicates:
+            - Path=/auth/**
+
+        - id: restaurant-service
+          uri: lb://RESTAURANT-SERVICE
+          predicates:
+            - Path=/restaurants/**, /items/**
+          filters:
+            - AuthenticationFilter
+
+#        # 3. Order Service (Protected)
+#        - id: order-service
+#          uri: lb://ORDER-SERVICE
+#          predicates:
+#            - Path=/api/v1/orders/**
+#          filters:
+#            - AuthenticationFilter
+#
+#        # 4. Profile Service (Protected)
+#        - id: profile-service
+#          uri: lb://PROFILE-SERVICE
+#          predicates:
+#            - Path=/api/v1/users/**, /api/v1/riders/**
+#          filters:
+#            - AuthenticationFilter
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    prefer-ip-address: true
+    ip-address: 127.0.0.1
+    instance-id: ${spring.application.name}:${random.value}
