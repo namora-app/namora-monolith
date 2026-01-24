@@ -41,6 +41,10 @@ public class Item {
     @Builder.Default
     private boolean isAvailable = true;
 
+    @Column(name = "rating")
+    @Builder.Default
+    private float rating = 0;
+
     @Column(name = "discount_percent")
     @Builder.Default
     private BigDecimal discountPercent = BigDecimal.ZERO;

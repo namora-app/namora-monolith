@@ -41,6 +41,9 @@ public class Restaurant {
     private Double latitude;
     private Double longitude;
 
+    @Column(columnDefinition = "geography(Point, 4326)")
+    private String location;
+
     @Column(name = "fssai_license")
     private String fssaiLicense;
 
