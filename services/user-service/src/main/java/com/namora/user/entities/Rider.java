@@ -28,8 +28,6 @@ public class Rider {
 
     private String vehicleNumber;
 
-    private String vehicleType;
-
     @Builder.Default
     private boolean isApproved = false;
 
