@@ -6,8 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.locationtech.jts.geom.Point;
 
-import java.awt.*;
 
 @Data
 @Entity
@@ -22,9 +22,9 @@ public class Address {
     private String id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "id", nullable = false)
     @JsonIgnore
-    private User userId;
+    private Customer customer;
 
     private Double latitude;
     private Double longitude;
