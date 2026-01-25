@@ -25,7 +25,7 @@ public class Item {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id", nullable = false)
-    @JsonIgnore  // Ignore the entire restaurant object
+    @JsonIgnore
     private Restaurant restaurant;
 
     @Column(nullable = false)
