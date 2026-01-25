@@ -59,8 +59,6 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
                     }
                     String userId = jwtUtil.getUserId(token);
                     String userRole = jwtUtil.getRole(token);
-                    System.out.println("User ID: " + userId + " Role: " + userRole);
-
                     ServerHttpRequest mutatedRequest = exchange.getRequest()
                             .mutate()
                             .header("X-User-ID", userId)

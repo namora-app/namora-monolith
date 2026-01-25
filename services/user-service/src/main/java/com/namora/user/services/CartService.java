@@ -19,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -97,6 +98,6 @@ public class CartService {
         List<CartItem> cartItems = cartItemRepository.findAllByCart(cartOptional.get());
         List<OrderItemRequest> orderItemRequests = cartItems.stream().map(cartItem -> new OrderItemRequest(cartItem.getItemId(), cartItem.getQuantity())).toList();
         cartItemRepository.deleteByCart(cartOptional.get());
-        return new ResponseEntity<>(ApiResponse.success("Order item fetched successfully!", orderItemRequests), HttpStatus.OK);
+        return new ResponseEntity<>(ApiResponse.success("Order item fetched successfully!", Map.of("customerId", optionalCustomer.get().getCustomerId(), "orderItems", orderItemRequests)), HttpStatus.OK);
     }
 }

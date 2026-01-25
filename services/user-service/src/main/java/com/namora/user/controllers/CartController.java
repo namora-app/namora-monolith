@@ -35,13 +35,4 @@ public class CartController {
             return new ResponseEntity<>(ApiResponse.error(ex.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
-    @PostMapping("/create-order")
-    public ResponseEntity<?> createOrder() {
-        try {
-            return cartService.createOrder();
-        } catch (Exception exception) {
-            return new ResponseEntity<>(ApiResponse.error(exception.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
 }
