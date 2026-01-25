@@ -25,4 +25,13 @@ public class OrderController {
             return new ResponseEntity<>(ApiResponse.error(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @PostMapping("{orderId}/confirm")
+    public ResponseEntity<?> confirmOrder(@PathVariable("orderId") String orderId) {
+        try {
+            return orderService.confirmOrder(orderId);
+        } catch (Exception e) {
+            return new ResponseEntity<>(ApiResponse.error(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

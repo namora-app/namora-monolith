@@ -19,10 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -179,4 +176,36 @@ public class OrderService {
         }
         return objectMapper.convertValue(addressResponse.data(), Address.class);
     }
+
+    public ResponseEntity<?> confirmOrder(String orderId) {
+        String userId = UserContext.getCurrentUserId();
+        String userRole = UserContext.getCurrentUserRole();
+
+        if (userId == null || userRole == null || !userRole.equals("CUSTOMER")) {
+            return new ResponseEntity<>(ApiResponse.error("Only customers are allowed!"), HttpStatus.FORBIDDEN);
+        }
+
+        Optional<Order> optionalOrder = orderRepository.findById(orderId);
+        if (optionalOrder.isEmpty()) {
+            return new ResponseEntity<>(ApiResponse.error("Order not found!"), HttpStatus.NOT_FOUND);
+        }
+
+        Order order = optionalOrder.get();
+        order.setStatus(OrderStatus.CONFIRMED);
+
+        OrderEvent event = OrderEvent.builder()
+                .orderId(order.getId())
+                .restaurantId(order.getRestaurantId())
+                .status("ORDER_CONFIRMED")
+                .pickupLat(order.getPickupLat())
+                .pickupLon(order.getPickupLng())
+                .dropLat(order.getDropLat())
+                .dropLon(order.getDropLng())
+                .build();
+
+        kafkaTemplate.send("order-events", order.getId(), event);
+
+        return new ResponseEntity<>(ApiResponse.success("Order confirmed!"), HttpStatus.OK);
+    }
+
 }
