@@ -2,10 +2,12 @@ package com.namora.user.services;
 
 import com.namora.user.dto.ApiResponse;
 import com.namora.user.dto.UserRequest;
+import com.namora.user.entities.Cart;
 import com.namora.user.entities.Customer;
 import com.namora.user.entities.Rider;
 import com.namora.user.entities.User;
 import com.namora.user.helpers.UserHelper;
+import com.namora.user.repositories.CartRepository;
 import com.namora.user.repositories.CustomerRepository;
 import com.namora.user.repositories.RiderRepository;
 import com.namora.user.repositories.UserRepository;
@@ -24,6 +26,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final CustomerRepository customerRepository;
     private final RiderRepository riderRepository;
+    private final CartRepository cartRepository;
 
     public ResponseEntity<?> createUser(UserRequest userRequest) {
         String userId = UserContext.getCurrentUserId();
@@ -42,6 +45,9 @@ public class UserService {
             Customer customer = new Customer();
             customer.setUser(savedUser);
             Customer savedCustomer = customerRepository.save(customer);
+            Cart cart = new Cart();
+            cart.setCustomer(savedCustomer);
+            cartRepository.save(cart);
             return new ResponseEntity<>(ApiResponse.success("User Created Successfully", UserHelper.getCustomerDto(savedUser, savedCustomer)), HttpStatus.OK);
         } else {
             Rider rider = new Rider();

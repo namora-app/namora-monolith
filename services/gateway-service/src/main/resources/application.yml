@@ -10,7 +10,6 @@ spring:
   cloud:
     gateway:
       routes:
-        # 1. Identity Service (Public - No Auth Filter needed for login/signup)
         - id: identity-service
           uri: lb://IDENTITY-SERVICE
           predicates:
@@ -23,21 +22,19 @@ spring:
           filters:
             - AuthenticationFilter
 
-#        # 3. Order Service (Protected)
-#        - id: order-service
-#          uri: lb://ORDER-SERVICE
-#          predicates:
-#            - Path=/api/v1/orders/**
-#          filters:
-#            - AuthenticationFilter
-#
-#        # 4. Profile Service (Protected)
-#        - id: profile-service
-#          uri: lb://PROFILE-SERVICE
-#          predicates:
-#            - Path=/api/v1/users/**, /api/v1/riders/**
-#          filters:
-#            - AuthenticationFilter
+        - id: order-service
+          uri: lb://ORDER-SERVICE
+          predicates:
+            - Path=/orders/**
+          filters:
+            - AuthenticationFilter
+
+        - id: profile-service
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/users/**, /riders/**, /customers/**, /carts/**
+          filters:
+            - AuthenticationFilter
 
 eureka:
   client:
