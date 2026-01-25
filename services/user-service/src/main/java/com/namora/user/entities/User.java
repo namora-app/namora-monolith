@@ -30,7 +30,8 @@ public class User {
 
     private String phoneNumber;
 
-    private String profileImageUrl;
+    @Builder.Default
+    private String profileImageUrl = "";
 
     @CreationTimestamp
     private LocalDateTime createdAt;
