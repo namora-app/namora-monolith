@@ -9,10 +9,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 @FeignClient(name = "USER-SERVICE")
 public interface UserClient {
 
-    @PostMapping("/carts/create-order")
+    @PostMapping("/internal/carts/create-order")
     ApiResponse<?> createOrder();
 
-    @GetMapping("/customers/{customerId}/addresses/{addressId}")
+    @GetMapping("/internal/customers/{customerId}/addresses/{addressId}")
     ApiResponse<?> getAddress(@PathVariable("customerId") String customerId, @PathVariable("addressId") String addressId);
 
 }

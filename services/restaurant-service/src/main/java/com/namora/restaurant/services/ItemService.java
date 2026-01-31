@@ -1,6 +1,7 @@
 package com.namora.restaurant.services;
 
 import com.namora.restaurant.dto.ApiResponse;
+import com.namora.restaurant.dto.ItemDetails;
 import com.namora.restaurant.dto.ItemRequest;
 import com.namora.restaurant.dto.ItemSearchResult;
 import com.namora.restaurant.entities.Item;
@@ -94,6 +95,22 @@ public class ItemService {
                 .collect(Collectors.toList());
 
         return ResponseEntity.ok(ApiResponse.success("Items found!", items));
+    }
+
+
+    public ResponseEntity<?> getItemById(String itemId) {
+        Optional<Item> itemOptional = itemRepository.findById(itemId);
+        if (itemOptional.isEmpty())
+            return new ResponseEntity<>(ApiResponse.error("Item not found!"), HttpStatus.NOT_FOUND);
+        Item item = itemOptional.get();
+        ItemDetails itemDetails = new ItemDetails(
+                item.getId(),
+                item.getName(),
+                item.getRestaurantId(),
+                item.getDiscountPercent(),
+                item.getPrice()
+        );
+        return new ResponseEntity<>(ApiResponse.success("Item details found!", itemDetails), HttpStatus.OK);
     }
 
 }

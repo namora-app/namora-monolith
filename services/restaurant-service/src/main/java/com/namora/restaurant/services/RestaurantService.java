@@ -1,5 +1,6 @@
 package com.namora.restaurant.services;
 
+import com.namora.restaurant.dto.Address;
 import com.namora.restaurant.dto.ApiResponse;
 import com.namora.restaurant.dto.RestaurantCreateRequest;
 import com.namora.restaurant.entities.Restaurant;
@@ -78,5 +79,15 @@ public class RestaurantService {
         restaurant.get().setOpen(!restaurant.get().isOpen());
         restaurantRepository.save(restaurant.get());
         return new ResponseEntity<>(ApiResponse.success("Restaurant toggled successfully!", restaurant.get()), HttpStatus.OK);
+    }
+
+    public ResponseEntity<?> getLocation(String restaurantId) {
+        Optional<Restaurant> restaurant = restaurantRepository.findById(restaurantId);
+        if (restaurant.isEmpty()) return new ResponseEntity<>("Restaurant not found!", HttpStatus.NOT_FOUND);
+        Address address = new Address();
+        address.setAddress(restaurant.get().getAddress());
+        address.setLatitude(restaurant.get().getLatitude());
+        address.setLongitude(restaurant.get().getLongitude());
+        return  new ResponseEntity<>(ApiResponse.success("Restaurant found!", restaurant.get()), HttpStatus.OK);
     }
 }

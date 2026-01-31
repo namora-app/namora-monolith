@@ -16,7 +16,6 @@ public class UserContextFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         String userId = request.getHeader("X-User-ID");
         String userRole = request.getHeader("X-Role");
-        System.out.println("UserContextFilter: userId = " + userId + " , userRole = " + userRole);
         if (userId != null) {
             UserContext.setCurrentUserId(userId);
             UserContext.setCurrentUserRole(userRole);

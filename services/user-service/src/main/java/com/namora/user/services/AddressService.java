@@ -31,6 +31,30 @@ public class AddressService {
     private final AddressRepository addressRepository;
     private final UserRepository userRepository;
 
+
+    public ResponseEntity<?> getAddressByCustomer(String customerId, String addressId) {
+        String userRole = UserContext.getCurrentUserRole();
+        String userId = UserContext.getCurrentUserId();
+        if (!userRole.equals("CUSTOMER"))
+            return new ResponseEntity<>(ApiResponse.error("Only Customers are allowed!"), HttpStatus.FORBIDDEN);
+        Optional<User> optionalUser = userRepository.findById(userId);
+        if (optionalUser.isEmpty())
+            return new ResponseEntity<>(ApiResponse.error("User not found!"), HttpStatus.NOT_FOUND);
+        Optional<Customer> optionalCustomer = customerRepository.findById(customerId);
+        if (optionalCustomer.isEmpty())
+            return new ResponseEntity<>(ApiResponse.error("Customer not found!"), HttpStatus.NOT_FOUND);
+        Optional<Address> optionalAddress = addressRepository.findById(addressId);
+        if (optionalAddress.isEmpty())
+            return new ResponseEntity<>(ApiResponse.error("Address not found!"), HttpStatus.NOT_FOUND);
+        Address address = optionalAddress.get();
+        AddressRequest request = new AddressRequest(
+                address.getLatitude(),
+                address.getLongitude(),
+                address.getAddress()
+        );
+        return new ResponseEntity<>(ApiResponse.success("Address", request), HttpStatus.OK);
+    }
+
     public ResponseEntity<?> addAddress(AddressRequest addressRequest, String customerId) {
         String userRole = UserContext.getCurrentUserRole();
         String userId = UserContext.getCurrentUserId();
@@ -68,9 +92,9 @@ public class AddressService {
         if (optionalAddress.isEmpty())
             return new ResponseEntity<>(ApiResponse.error("Address not found!"), HttpStatus.NOT_FOUND);
         Address address = optionalAddress.get();
-        address.setLatitude(address.getLatitude());
-        address.setLongitude(address.getLongitude());
-        address.setAddress(address.getAddress());
+        address.setLatitude(addressRequest.latitude());
+        address.setLongitude(addressRequest.longitude());
+        address.setAddress(addressRequest.address());
         Point location = geometryFactory.createPoint(new Coordinate(addressRequest.longitude(), addressRequest.latitude()));
         address.setLocation(location);
         Address savedAddress = addressRepository.save(address);

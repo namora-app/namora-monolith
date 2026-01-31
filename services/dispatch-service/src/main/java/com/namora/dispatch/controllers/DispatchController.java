@@ -13,7 +13,7 @@ public class DispatchController {
     private final RiderService riderService;
 
     @PostMapping("/{riderId}/location")
-    public ResponseEntity<Void> updateLocation(@PathVariable String riderId, @RequestParam double lat, @RequestParam double lon) {
+    public ResponseEntity<Void> updateLocation(@PathVariable("riderId") String riderId, @RequestParam("lat") double lat, @RequestParam("lon") double lon) {
         riderService.updateRiderLocation(riderId, lat, lon);
         return ResponseEntity.ok().build();
     }

@@ -41,6 +41,8 @@ public class OrderService {
         String userId = UserContext.getCurrentUserId();
         String userRole = UserContext.getCurrentUserRole();
 
+        System.out.println("userRole: " + userRole + ", userId: " + userId);
+
         if (userId == null || userRole == null || !userRole.equals("CUSTOMER")) {
             return new ResponseEntity<>(ApiResponse.error("Only customers are allowed!"), HttpStatus.FORBIDDEN);
         }
@@ -68,16 +70,14 @@ public class OrderService {
 
     private Map<String, List<ItemDetails>> mapByRestaurant(List<CartItemRequest> cartItems) {
         List<String> itemIds = cartItems.stream().map(CartItemRequest::itemId).toList();
-        List<? extends ApiResponse<?>> itemDetailsResponse = itemIds.stream()
-                .map(restaurantClient::getItemDetails)
-                .toList();
-
         Map<String, List<ItemDetails>> restaurantIdMap = new HashMap<>();
-
-        for (ApiResponse<?> response : itemDetailsResponse) {
-            if (response.success()) {
-                ItemDetails itemDetail = objectMapper.convertValue(response.data(), ItemDetails.class);
-                restaurantIdMap.computeIfAbsent(itemDetail.restaurantId(), _ -> new ArrayList<>()).add(itemDetail);
+        for(String itemId : itemIds) {
+            System.out.println("itemId: " + itemId);
+            ApiResponse<?> itemIdResponse = restaurantClient.getItemDetails(itemId);
+            if (itemIdResponse.success()) {
+                System.out.println(itemIdResponse.data());
+                ItemDetails itemDetails = objectMapper.convertValue(itemIdResponse.data(), ItemDetails.class);
+                restaurantIdMap.computeIfAbsent(itemDetails.restaurantId(), k -> new ArrayList<>()).add(itemDetails);
             }
         }
         return restaurantIdMap;
