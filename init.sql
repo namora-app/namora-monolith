@@ -3,3 +3,7 @@ CREATE DATABASE user_db;
 CREATE DATABASE auth_db;
 CREATE DATABASE restaurant_db;
 CREATE DATABASE payment_db;
+
+\c restaurant_db;
+CREATE EXTENSION IF NOT EXISTS postgis;
+CREATE EXTENSION IF NOT EXISTS pg_trgm;

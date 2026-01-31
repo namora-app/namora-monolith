@@ -15,7 +15,6 @@ import lombok.NoArgsConstructor;
 public class Customer {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")
     private String customerId;
 

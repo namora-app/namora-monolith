@@ -17,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import java.util.Optional;
 
 @Service
@@ -70,11 +71,36 @@ public class UserService {
         userToUpdate.setPhoneNumber(userRequest.phoneNumber());
         User savedUser = userRepository.save(userToUpdate);
         if (userRole.equals("CUSTOMER")) {
-            Customer customer = customerRepository.findByUser(userToUpdate);
-            return new ResponseEntity<>(ApiResponse.success("User Created Successfully", UserHelper.getCustomerDto(savedUser, customer)), HttpStatus.OK);
+            Optional<Customer> customer = customerRepository.findByUser(userToUpdate);
+            return new ResponseEntity<>(ApiResponse.success("User Created Successfully", UserHelper.getCustomerDto(savedUser, customer.get())), HttpStatus.OK);
         } else {
-            Rider rider = riderRepository.findByUser(userToUpdate);
-            return new ResponseEntity<>(ApiResponse.success("User Updated Successfully", UserHelper.getRiderDto(savedUser, rider)), HttpStatus.OK);
+            Optional<Rider> rider = riderRepository.findByUser(userToUpdate);
+            return new ResponseEntity<>(ApiResponse.success("User Updated Successfully", UserHelper.getRiderDto(savedUser, rider.get())), HttpStatus.OK);
         }
     }
+
+    public ResponseEntity<?> getInfo() {
+        String userId = UserContext.getCurrentUserId();
+        String userRole = UserContext.getCurrentUserRole();
+        if (!(userRole.equals("RIDER") || userRole.equals("CUSTOMER")))
+            return new ResponseEntity<>(ApiResponse.error("Only Rider and Customers are allowed!"), HttpStatus.FORBIDDEN);
+        Optional<User> optionalUser = userRepository.findById(userId);
+        if (optionalUser.isEmpty())
+            return new ResponseEntity<>(ApiResponse.error("User not found!"), HttpStatus.NOT_FOUND);
+        User user = optionalUser.get();
+        if (userRole.equals("CUSTOMER")) {
+            Optional<Customer> optionalCustomer = customerRepository.findByUser(user);
+            if (optionalCustomer.isEmpty()) {
+                return new ResponseEntity<>(ApiResponse.error("Customer not found!"), HttpStatus.NOT_FOUND);
+            }
+            return new ResponseEntity<>(ApiResponse.success("Customer fetched successfully", UserHelper.getCustomerDto(user, optionalCustomer.get())), HttpStatus.OK);
+        }else{
+            Optional<Rider> optionalRider = riderRepository.findByUser(user);
+            if (optionalRider.isEmpty()) {
+                return new ResponseEntity<>(ApiResponse.error("Rider not found!"), HttpStatus.NOT_FOUND);
+            }
+            return new ResponseEntity<>(ApiResponse.success("Customer fetched successfully", UserHelper.getRiderDto(user, optionalRider.get())), HttpStatus.OK);
+        }
+    }
+
 }

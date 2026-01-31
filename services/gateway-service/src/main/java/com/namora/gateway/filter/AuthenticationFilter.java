@@ -31,6 +31,7 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
     public GatewayFilter apply(Config config) {
         return ((exchange, chain) -> {
             String pathUrl = exchange.getRequest().getURI().getPath();
+            System.out.println("Path: " + pathUrl);
             if (!pathUrl.startsWith("/auth")) {
                 String token = null;
 
@@ -59,6 +60,7 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
                     }
                     String userId = jwtUtil.getUserId(token);
                     String userRole = jwtUtil.getRole(token);
+                    System.out.println("GATEWAY_FILTER: " + " userId = " + userId + " userRole = " + userRole);
                     ServerHttpRequest mutatedRequest = exchange.getRequest()
                             .mutate()
                             .header("X-User-ID", userId)

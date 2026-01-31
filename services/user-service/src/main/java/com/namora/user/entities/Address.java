@@ -2,10 +2,7 @@ package com.namora.user.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.locationtech.jts.geom.Point;
 
 
@@ -21,8 +18,9 @@ public class Address {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
+    @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id", nullable = false)
+    @JoinColumn(name = "customer_id", nullable = false)
     @JsonIgnore
     private Customer customer;
 
@@ -33,7 +31,7 @@ public class Address {
     @Column(columnDefinition = "geography(Point, 4326)")
     private Point location;
 
-    @Column(name = "address", columnDefinition = "TEXT")
+    @Column(name = "full_address_text", columnDefinition = "TEXT")
     private String address;
 
 }

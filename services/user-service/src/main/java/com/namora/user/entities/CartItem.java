@@ -17,7 +17,7 @@ public class CartItem {
 
     @Id
     @Column(name = "id", nullable = false, updatable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
     @Builder.Default
@@ -29,6 +29,6 @@ public class CartItem {
 
     @JsonIgnore
     @ManyToOne
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "cart_id")
     private Cart cart;
 }

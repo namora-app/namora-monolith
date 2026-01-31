@@ -39,25 +39,25 @@ public class CartService {
         Optional<User> optionalUser = userRepository.findById(userId);
         if (optionalUser.isEmpty())
             return new ResponseEntity<>(ApiResponse.error("User not found!"), HttpStatus.NOT_FOUND);
-        Optional<Customer> optionalCustomer = Optional.ofNullable(customerRepository.findByUser(optionalUser.get()));
+        Optional<Customer> optionalCustomer = customerRepository.findByUser(optionalUser.get());
         if (optionalCustomer.isEmpty())
             return new ResponseEntity<>(ApiResponse.error("Customer not found!"), HttpStatus.NOT_FOUND);
         Optional<Cart> cartOptional = cartRepository.findByCustomer(optionalCustomer.get());
         if (cartOptional.isEmpty())
             return new ResponseEntity<>(ApiResponse.error("Cart not found!"), HttpStatus.NOT_FOUND);
-        Optional<CartItem> optionalCartItem = cartItemRepository.findByItemId(cartItemRequest.itemId(), cartOptional.get());
+        Optional<CartItem> optionalCartItem = cartItemRepository.findByCartAndItemId(cartOptional.get(), cartItemRequest.itemId());
         if (optionalCartItem.isEmpty()) {
             CartItem cartItem = new CartItem();
             cartItem.setItemId(cartItemRequest.itemId());
             cartItem.setQuantity(cartItemRequest.quantity());
             cartItem.setCart(cartOptional.get());
             cartItemRepository.save(cartItem);
-            Optional<CartItem> response = cartItemRepository.findByItemId(cartItemRequest.itemId(), cartOptional.get());
+            Optional<CartItem> response = cartItemRepository.findByCartAndItemId(cartOptional.get(), cartItemRequest.itemId());
             return new ResponseEntity<>(ApiResponse.success("CartItem added successfully!", response.get()), HttpStatus.CREATED);
         } else {
             optionalCartItem.get().setQuantity(cartItemRequest.quantity());
             cartItemRepository.save(optionalCartItem.get());
-            Optional<CartItem> response = cartItemRepository.findByItemId(cartItemRequest.itemId(), cartOptional.get());
+            Optional<CartItem> response = cartItemRepository.findByCartAndItemId(cartOptional.get(), cartItemRequest.itemId());
             return new ResponseEntity<>(ApiResponse.success("CartItem updated successfully!", response.get()), HttpStatus.OK);
         }
     }
@@ -70,7 +70,7 @@ public class CartService {
         Optional<User> optionalUser = userRepository.findById(userId);
         if (optionalUser.isEmpty())
             return new ResponseEntity<>(ApiResponse.error("User not found!"), HttpStatus.NOT_FOUND);
-        Optional<Customer> optionalCustomer = Optional.ofNullable(customerRepository.findByUser(optionalUser.get()));
+        Optional<Customer> optionalCustomer = customerRepository.findByUser(optionalUser.get());
         if (optionalCustomer.isEmpty())
             return new ResponseEntity<>(ApiResponse.error("Customer not found!"), HttpStatus.NOT_FOUND);
         Optional<Cart> cartOptional = cartRepository.findByCustomer(optionalCustomer.get());
@@ -89,7 +89,7 @@ public class CartService {
         Optional<User> optionalUser = userRepository.findById(userId);
         if (optionalUser.isEmpty())
             return new ResponseEntity<>(ApiResponse.error("User not found!"), HttpStatus.NOT_FOUND);
-        Optional<Customer> optionalCustomer = Optional.ofNullable(customerRepository.findByUser(optionalUser.get()));
+        Optional<Customer> optionalCustomer = customerRepository.findByUser(optionalUser.get());
         if (optionalCustomer.isEmpty())
             return new ResponseEntity<>(ApiResponse.error("Customer not found!"), HttpStatus.NOT_FOUND);
         Optional<Cart> cartOptional = cartRepository.findByCustomer(optionalCustomer.get());

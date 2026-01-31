@@ -16,8 +16,18 @@ public class UserController {
 
     private final UserService userService;
 
+    @GetMapping
+    public ResponseEntity<?> getInfo(){
+        try{
+            return userService.getInfo();
+        }catch(Exception e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @PostMapping
     public ResponseEntity<?> createUser(@Valid @RequestBody UserRequest userRequest) {
+        System.out.println("HIT");
         try {
             return userService.createUser(userRequest);
         } catch (Exception e) {

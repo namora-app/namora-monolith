@@ -15,7 +15,6 @@ import lombok.NoArgsConstructor;
 public class Rider {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     private String riderId;
 
     @OneToOne

@@ -1,5 +1,5 @@
 server:
-  port: 8090 # The Gateway usually runs on 8080
+  port: 8090
 
 auth:
   ACCESS_TOKEN_SECRET: ${ACCESS_TOKEN_SECRET}
@@ -29,10 +29,17 @@ spring:
           filters:
             - AuthenticationFilter
 
-        - id: profile-service
+        - id: user-service
           uri: lb://USER-SERVICE
           predicates:
             - Path=/users/**, /riders/**, /customers/**, /carts/**
+          filters:
+            - AuthenticationFilter
+
+        - id: payment-service
+          uri: lb://PAYMENT-SERVICE
+          predicates:
+            - Path=/payments/**
           filters:
             - AuthenticationFilter
 
