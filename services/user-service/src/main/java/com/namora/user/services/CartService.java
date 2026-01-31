@@ -31,6 +31,7 @@ public class CartService {
     private final UserRepository userRepository;
     private final CustomerRepository customerRepository;
 
+    @Transactional
     public ResponseEntity<?> addCartItem(CartItemRequest cartItemRequest) {
         String userRole = UserContext.getCurrentUserRole();
         String userId = UserContext.getCurrentUserId();
@@ -62,6 +63,7 @@ public class CartService {
         }
     }
 
+    @Transactional
     public ResponseEntity<?> clearCart() {
         String userRole = UserContext.getCurrentUserRole();
         String userId = UserContext.getCurrentUserId();

@@ -44,9 +44,9 @@ public class AddressService {
             return new ResponseEntity<>(ApiResponse.error("Customer not found!"), HttpStatus.NOT_FOUND);
         Address address = new Address();
         address.setCustomer(optionalCustomer.get());
-        address.setAddress(address.getAddress());
-        address.setLatitude(address.getLatitude());
-        address.setLongitude(address.getLongitude());
+        address.setAddress(addressRequest.address());
+        address.setLatitude(addressRequest.latitude());
+        address.setLongitude(addressRequest.longitude());
         Point location = geometryFactory.createPoint(new Coordinate(addressRequest.longitude(), addressRequest.latitude()));
         address.setLocation(location);
         Address savedAddress = addressRepository.save(address);
@@ -92,10 +92,12 @@ public class AddressService {
         if (optionalAddress.isEmpty())
             return new ResponseEntity<>(ApiResponse.error("Address not found!"), HttpStatus.NOT_FOUND);
         List<Address> customerAddresses = addressRepository.findByCustomer(optionalCustomer.get());
+
+        System.out.println(customerAddresses);
         Address previousDefaultAddress = null;
         for (Address temp : customerAddresses) {
             String address = temp.getAddress();
-            if (address.startsWith("DEFAULT_")) {
+            if (address != null && address.startsWith("DEFAULT_")) {
                 previousDefaultAddress = temp;
                 break;
             }

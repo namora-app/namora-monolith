@@ -22,6 +22,7 @@ public class AuthHelper {
     }
 
     public static Result checkRestaurantAuth(String userRole, String userId, Optional<Restaurant> optionalRestaurant) {
+        System.out.println("OwnerId: " + optionalRestaurant.get().getOwnerId() + " UserId: " + userId);
         if (!userRole.equals("RESTAURANT_OWNER"))
             return new Result(false, new ResponseEntity<>("Invalid user role", HttpStatus.FORBIDDEN));
         if (optionalRestaurant.isEmpty())

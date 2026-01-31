@@ -1,0 +1,1204 @@
+{
+  "info": {
+    "name": "Namora Food Delivery API",
+    "description": "Complete API collection for Namora microservices-based food delivery platform",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "gateway_url",
+      "value": "http://localhost:8090",
+      "type": "string"
+    },
+    {
+      "key": "customer_email",
+      "value": "customer@test.com",
+      "type": "string"
+    },
+    {
+      "key": "rider_email",
+      "value": "rider@test.com",
+      "type": "string"
+    },
+    {
+      "key": "restaurant_owner_email",
+      "value": "owner@test.com",
+      "type": "string"
+    },
+    {
+      "key": "password",
+      "value": "test123456",
+      "type": "string"
+    },
+    {
+      "key": "access_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "user_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "customer_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "rider_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "restaurant_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "item_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "address_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "order_id",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Identity Service",
+      "item": [
+        {
+          "name": "Register Customer",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{customer_email}}\",\n  \"password\": \"{{password}}\",\n  \"role\": \"CUSTOMER\"\n}"
+            },
+            "url": {
+              "raw": "{{gateway_url}}/auth/register",
+              "host": [
+                "{{gateway_url}}"
+              ],
+              "path": [
+                "auth",
+                "register"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Register Rider",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{rider_email}}\",\n  \"password\": \"{{password}}\",\n  \"role\": \"RIDER\"\n}"
+            },
+            "url": {
+              "raw": "{{gateway_url}}/auth/register",
+              "host": [
+                "{{gateway_url}}"
+              ],
+              "path": [
+                "auth",
+                "register"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Register Restaurant Owner",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{restaurant_owner_email}}\",\n  \"password\": \"{{password}}\",\n  \"role\": \"RESTAURANT_OWNER\"\n}"
+            },
+            "url": {
+              "raw": "{{gateway_url}}/auth/register",
+              "host": [
+                "{{gateway_url}}"
+              ],
+              "path": [
+                "auth",
+                "register"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Login Customer",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{customer_email}}\",\n  \"password\": \"{{password}}\"\n}"
+            },
+            "url": {
+              "raw": "{{gateway_url}}/auth/login",
+              "host": [
+                "{{gateway_url}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Login Rider",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{rider_email}}\",\n  \"password\": \"{{password}}\"\n}"
+            },
+            "url": {
+              "raw": "{{gateway_url}}/auth/login",
+              "host": [
+                "{{gateway_url}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Login Restaurant Owner",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{restaurant_owner_email}}\",\n  \"password\": \"{{password}}\"\n}"
+            },
+            "url": {
+              "raw": "{{gateway_url}}/auth/login",
+              "host": [
+                "{{gateway_url}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Refresh Token",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{gateway_url}}/auth/refresh",
+              "host": [
+                "{{gateway_url}}"
+              ],
+              "path": [
+                "auth",
+                "refresh"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{gateway_url}}/auth/logout",
+              "host": [
+                "{{gateway_url}}"
+              ],
+              "path": [
+                "auth",
+                "logout"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. User Service",
+      "item": [
+        {
+          "name": "User Management",
+          "item": [
+            {
+              "name": "Create User Profile",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"John Customer\",\n  \"phoneNumber\": \"+919876543210\"\n}"
+                },
+                "url": {
+                  "raw": "{{gateway_url}}/users",
+                  "host": [
+                    "{{gateway_url}}"
+                  ],
+                  "path": [
+                    "users"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Update User Profile",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"John Updated\",\n  \"phoneNumber\": \"+919876543210\"\n}"
+                },
+                "url": {
+                  "raw": "{{gateway_url}}/users",
+                  "host": [
+                    "{{gateway_url}}"
+                  ],
+                  "path": [
+                    "users"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Get User Info",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{gateway_url}}/users",
+                  "host": [
+                    "{{gateway_url}}"
+                  ],
+                  "path": [
+                    "users"
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "Customer Addresses",
+          "item": [
+            {
+              "name": "Add Address",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"latitude\": 12.9716,\n  \"longitude\": 77.5946,\n  \"address\": \"123 MG Road, Bangalore, Karnataka 560001\"\n}"
+                },
+                "url": {
+                  "raw": "{{gateway_url}}/customers/{{customer_id}}/addresses",
+                  "host": [
+                    "{{gateway_url}}"
+                  ],
+                  "path": [
+                    "customers",
+                    "{{customer_id}}",
+                    "addresses"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Update Address",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"latitude\": 12.9352,\n  \"longitude\": 77.6245,\n  \"address\": \"456 HSR Layout, Bangalore, Karnataka 560102\"\n}"
+                },
+                "url": {
+                  "raw": "{{gateway_url}}/customers/{{customer_id}}/addresses/{{address_id}}",
+                  "host": [
+                    "{{gateway_url}}"
+                  ],
+                  "path": [
+                    "customers",
+                    "{{customer_id}}",
+                    "addresses",
+                    "{{address_id}}"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Make Default Address",
+              "request": {
+                "method": "PUT",
+                "header": [],
+                "url": {
+                  "raw": "{{gateway_url}}/customers/{{customer_id}}/addresses/{{address_id}}/default",
+                  "host": [
+                    "{{gateway_url}}"
+                  ],
+                  "path": [
+                    "customers",
+                    "{{customer_id}}",
+                    "addresses",
+                    "{{address_id}}",
+                    "default"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Get Customer Address (Internal)",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{gateway_url}}/customers/{{customer_id}}/addresses/{{address_id}}",
+                  "host": [
+                    "{{gateway_url}}"
+                  ],
+                  "path": [
+                    "customers",
+                    "{{customer_id}}",
+                    "addresses",
+                    "{{address_id}}"
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "Rider Management",
+          "item": [
+            {
+              "name": "Submit Rider Details",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"licenseNumber\": \"DL1234567890\",\n  \"vehicleNumber\": \"KA-01-AB-1234\"\n}"
+                },
+                "url": {
+                  "raw": "{{gateway_url}}/riders/{{rider_id}}/submit",
+                  "host": [
+                    "{{gateway_url}}"
+                  ],
+                  "path": [
+                    "riders",
+                    "{{rider_id}}",
+                    "submit"
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "Cart Management",
+          "item": [
+            {
+              "name": "Add Item to Cart",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"itemId\": \"{{item_id}}\",\n  \"quantity\": 2\n}"
+                },
+                "url": {
+                  "raw": "{{gateway_url}}/carts/add",
+                  "host": [
+                    "{{gateway_url}}"
+                  ],
+                  "path": [
+                    "carts",
+                    "add"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Clear Cart",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "url": {
+                  "raw": "{{gateway_url}}/carts/clear",
+                  "host": [
+                    "{{gateway_url}}"
+                  ],
+                  "path": [
+                    "carts",
+                    "clear"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Create Order from Cart (Internal)",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "url": {
+                  "raw": "{{gateway_url}}/carts/create-order",
+                  "host": [
+                    "{{gateway_url}}"
+                  ],
+                  "path": [
+                    "carts",
+                    "create-order"
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "3. Restaurant Service",
+      "item": [
+        {
+          "name": "Restaurant Management",
+          "item": [
+            {
+              "name": "Create Restaurant",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Pizza Palace\",\n  \"address\": \"789 Food Street, Koramangala, Bangalore, Karnataka 560034\",\n  \"latitude\": 12.9279,\n  \"longitude\": 77.6271,\n  \"fssaiLicense\": \"12345678901234\"\n}"
+                },
+                "url": {
+                  "raw": "{{gateway_url}}/restaurants",
+                  "host": [
+                    "{{gateway_url}}"
+                  ],
+                  "path": [
+                    "restaurants"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Update Restaurant",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Pizza Palace Deluxe\",\n  \"address\": \"789 Food Street, Koramangala, Bangalore, Karnataka 560034\",\n  \"latitude\": 12.9279,\n  \"longitude\": 77.6271,\n  \"fssaiLicense\": \"12345678901234\"\n}"
+                },
+                "url": {
+                  "raw": "{{gateway_url}}/restaurants/{{restaurant_id}}",
+                  "host": [
+                    "{{gateway_url}}"
+                  ],
+                  "path": [
+                    "restaurants",
+                    "{{restaurant_id}}"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Get Owner's Restaurants",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{gateway_url}}/restaurants/owner",
+                  "host": [
+                    "{{gateway_url}}"
+                  ],
+                  "path": [
+                    "restaurants",
+                    "owner"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Toggle Restaurant Status",
+              "request": {
+                "method": "PUT",
+                "header": [],
+                "url": {
+                  "raw": "{{gateway_url}}/restaurants/{{restaurant_id}}/status",
+                  "host": [
+                    "{{gateway_url}}"
+                  ],
+                  "path": [
+                    "restaurants",
+                    "{{restaurant_id}}",
+                    "status"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Get Restaurant Location",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{gateway_url}}/restaurants/{{restaurant_id}}/location",
+                  "host": [
+                    "{{gateway_url}}"
+                  ],
+                  "path": [
+                    "restaurants",
+                    "{{restaurant_id}}",
+                    "location"
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "Menu Items",
+          "item": [
+            {
+              "name": "Add Menu Item",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Margherita Pizza\",\n  \"description\": \"Classic Italian pizza with tomato sauce, mozzarella cheese, and fresh basil\",\n  \"isVeg\": true,\n  \"price\": 299.00\n}"
+                },
+                "url": {
+                  "raw": "{{gateway_url}}/restaurants/{{restaurant_id}}/items",
+                  "host": [
+                    "{{gateway_url}}"
+                  ],
+                  "path": [
+                    "restaurants",
+                    "{{restaurant_id}}",
+                    "items"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Add Menu Item - Pepperoni Pizza",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Pepperoni Pizza\",\n  \"description\": \"Loaded with pepperoni, cheese, and Italian herbs\",\n  \"isVeg\": false,\n  \"price\": 399.00\n}"
+                },
+                "url": {
+                  "raw": "{{gateway_url}}/restaurants/{{restaurant_id}}/items",
+                  "host": [
+                    "{{gateway_url}}"
+                  ],
+                  "path": [
+                    "restaurants",
+                    "{{restaurant_id}}",
+                    "items"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Add Menu Item - Garlic Bread",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Garlic Bread\",\n  \"description\": \"Toasted bread with garlic butter and herbs\",\n  \"isVeg\": true,\n  \"price\": 99.00\n}"
+                },
+                "url": {
+                  "raw": "{{gateway_url}}/restaurants/{{restaurant_id}}/items",
+                  "host": [
+                    "{{gateway_url}}"
+                  ],
+                  "path": [
+                    "restaurants",
+                    "{{restaurant_id}}",
+                    "items"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Update Menu Item",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Margherita Pizza Special\",\n  \"description\": \"Classic Italian pizza with extra cheese and fresh basil\",\n  \"isVeg\": true,\n  \"price\": 349.00\n}"
+                },
+                "url": {
+                  "raw": "{{gateway_url}}/restaurants/{{restaurant_id}}/items/{{item_id}}",
+                  "host": [
+                    "{{gateway_url}}"
+                  ],
+                  "path": [
+                    "restaurants",
+                    "{{restaurant_id}}",
+                    "items",
+                    "{{item_id}}"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Delete Menu Item",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{gateway_url}}/restaurants/{{restaurant_id}}/items/{{item_id}}",
+                  "host": [
+                    "{{gateway_url}}"
+                  ],
+                  "path": [
+                    "restaurants",
+                    "{{restaurant_id}}",
+                    "items",
+                    "{{item_id}}"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Get Items by Restaurant",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{gateway_url}}/items/restaurants/{{restaurant_id}}",
+                  "host": [
+                    "{{gateway_url}}"
+                  ],
+                  "path": [
+                    "items",
+                    "restaurants",
+                    "{{restaurant_id}}"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Search Items - Pizza",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{gateway_url}}/items?name=pizza&latitude=12.9716&longitude=77.5946",
+                  "host": [
+                    "{{gateway_url}}"
+                  ],
+                  "path": [
+                    "items"
+                  ],
+                  "query": [
+                    {
+                      "key": "name",
+                      "value": "pizza"
+                    },
+                    {
+                      "key": "latitude",
+                      "value": "12.9716"
+                    },
+                    {
+                      "key": "longitude",
+                      "value": "77.5946"
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Search Items - Biryani",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{gateway_url}}/items?name=biryani&latitude=12.9716&longitude=77.5946",
+                  "host": [
+                    "{{gateway_url}}"
+                  ],
+                  "path": [
+                    "items"
+                  ],
+                  "query": [
+                    {
+                      "key": "name",
+                      "value": "biryani"
+                    },
+                    {
+                      "key": "latitude",
+                      "value": "12.9716"
+                    },
+                    {
+                      "key": "longitude",
+                      "value": "77.5946"
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Get Item Details",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{gateway_url}}/items/{{item_id}}",
+                  "host": [
+                    "{{gateway_url}}"
+                  ],
+                  "path": [
+                    "items",
+                    "{{item_id}}"
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "Restaurant Schedule",
+          "item": [
+            {
+              "name": "Set Monday Schedule",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"weekDay\": \"MONDAY\",\n  \"startTime\": \"09:00:00\",\n  \"endTime\": \"22:00:00\"\n}"
+                },
+                "url": {
+                  "raw": "{{gateway_url}}/restaurants/{{restaurant_id}}/schedule",
+                  "host": [
+                    "{{gateway_url}}"
+                  ],
+                  "path": [
+                    "restaurants",
+                    "{{restaurant_id}}",
+                    "schedule"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Set Tuesday Schedule",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"weekDay\": \"TUESDAY\",\n  \"startTime\": \"09:00:00\",\n  \"endTime\": \"22:00:00\"\n}"
+                },
+                "url": {
+                  "raw": "{{gateway_url}}/restaurants/{{restaurant_id}}/schedule",
+                  "host": [
+                    "{{gateway_url}}"
+                  ],
+                  "path": [
+                    "restaurants",
+                    "{{restaurant_id}}",
+                    "schedule"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Set Weekend Schedule",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"weekDay\": \"SATURDAY\",\n  \"startTime\": \"10:00:00\",\n  \"endTime\": \"23:00:00\"\n}"
+                },
+                "url": {
+                  "raw": "{{gateway_url}}/restaurants/{{restaurant_id}}/schedule",
+                  "host": [
+                    "{{gateway_url}}"
+                  ],
+                  "path": [
+                    "restaurants",
+                    "{{restaurant_id}}",
+                    "schedule"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Get Restaurant Schedule",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{gateway_url}}/restaurants/{{restaurant_id}}/schedule",
+                  "host": [
+                    "{{gateway_url}}"
+                  ],
+                  "path": [
+                    "restaurants",
+                    "{{restaurant_id}}",
+                    "schedule"
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "4. Order Service",
+      "item": [
+        {
+          "name": "Place Order",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{gateway_url}}/orders/{{address_id}}",
+              "host": [
+                "{{gateway_url}}"
+              ],
+              "path": [
+                "orders",
+                "{{address_id}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Confirm Order",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{gateway_url}}/orders/{{order_id}}/confirm",
+              "host": [
+                "{{gateway_url}}"
+              ],
+              "path": [
+                "orders",
+                "{{order_id}}",
+                "confirm"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. Payment Service",
+      "item": [
+        {
+          "name": "Process Payment - UPI",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"orderId\": \"{{order_id}}\",\n  \"amount\": 450.00,\n  \"paymentMode\": \"UPI\"\n}"
+            },
+            "url": {
+              "raw": "{{gateway_url}}/payments/pay",
+              "host": [
+                "{{gateway_url}}"
+              ],
+              "path": [
+                "payments",
+                "pay"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Process Payment - Card",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"orderId\": \"{{order_id}}\",\n  \"amount\": 450.00,\n  \"paymentMode\": \"CARD\"\n}"
+            },
+            "url": {
+              "raw": "{{gateway_url}}/payments/pay",
+              "host": [
+                "{{gateway_url}}"
+              ],
+              "path": [
+                "payments",
+                "pay"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Process Payment - Cash",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"orderId\": \"{{order_id}}\",\n  \"amount\": 450.00,\n  \"paymentMode\": \"CASH\"\n}"
+            },
+            "url": {
+              "raw": "{{gateway_url}}/payments/pay",
+              "host": [
+                "{{gateway_url}}"
+              ],
+              "path": [
+                "payments",
+                "pay"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "6. Dispatch Service",
+      "item": [
+        {
+          "name": "Update Rider Location - Koramangala",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{gateway_url}}/dispatch/riders/{{rider_id}}/location?lat=12.9279&lon=77.6271",
+              "host": [
+                "{{gateway_url}}"
+              ],
+              "path": [
+                "dispatch",
+                "riders",
+                "{{rider_id}}",
+                "location"
+              ],
+              "query": [
+                {
+                  "key": "lat",
+                  "value": "12.9279"
+                },
+                {
+                  "key": "lon",
+                  "value": "77.6271"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Rider Location - Indiranagar",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{gateway_url}}/dispatch/riders/{{rider_id}}/location?lat=12.9784&lon=77.6408",
+              "host": [
+                "{{gateway_url}}"
+              ],
+              "path": [
+                "dispatch",
+                "riders",
+                "{{rider_id}}",
+                "location"
+              ],
+              "query": [
+                {
+                  "key": "lat",
+                  "value": "12.9784"
+                },
+                {
+                  "key": "lon",
+                  "value": "77.6408"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Rider Location - Whitefield",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{gateway_url}}/dispatch/riders/{{rider_id}}/location?lat=12.9698&lon=77.7500",
+              "host": [
+                "{{gateway_url}}"
+              ],
+              "path": [
+                "dispatch",
+                "riders",
+                "{{rider_id}}",
+                "location"
+              ],
+              "query": [
+                {
+                  "key": "lat",
+                  "value": "12.9698"
+                },
+                {
+                  "key": "lon",
+                  "value": "77.7500"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

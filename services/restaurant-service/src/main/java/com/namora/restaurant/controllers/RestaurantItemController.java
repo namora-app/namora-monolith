@@ -35,7 +35,7 @@ public class RestaurantItemController {
     }
 
     @DeleteMapping("/{itemId}")
-    public ResponseEntity<?> deleteItem(@PathVariable String restaurantId, @PathVariable("itemId") String itemId) {
+    public ResponseEntity<?> deleteItem(@PathVariable("restaurantId") String restaurantId, @PathVariable("itemId") String itemId) {
         try {
             return itemService.deleteItem(restaurantId, itemId);
         } catch (Exception error) {
